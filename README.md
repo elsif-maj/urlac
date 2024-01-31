@@ -1,6 +1,6 @@
 # Readme
 
-This is an experimentation in getting clients connected for audio chat via WebRTC using a Go SF.
+This is an experimentation in getting clients connected for audio chat via WebRTC using a Go SFU.
 
 The server and client files being used here are *barely* modified versions of the Pion examples repository directory called sfu-ws ( link ).
 
