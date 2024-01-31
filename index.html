@@ -52,6 +52,14 @@
       stream.getTracks().forEach(track => pc.addTrack(track, stream))
 
       let ws = new WebSocket("{{.}}")
+
+      // Send a heartbeat every 5 seconds
+      setInterval(() => {
+        if (ws.readyState === ws.OPEN) {
+          ws.send(JSON.stringify({ event: 'heartbeat', data: 'ping' }));
+        }
+      }, 5000);
+
       pc.onicecandidate = e => {
         if (!e.candidate) {
           return
