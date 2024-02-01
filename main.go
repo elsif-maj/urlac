@@ -1,6 +1,9 @@
 // SPDX-FileCopyrightText: 2023 The Pion community <https://pion.ly>
 // SPDX-License-Identifier: MIT
 
+// SPDX-FileCopyrightText: 2024 Michael Johnson <https://github.com/elsif-maj>
+// SPDX-License-Identifier: MIT
+
 //go:build !js
 // +build !js
 
