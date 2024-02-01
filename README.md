@@ -12,3 +12,7 @@ Next step might be trying to add a 'heartbeat' message from the client over WS t
 1/30/24 22:45
 
 The heartbeat worked! This is a great. Next steps are to just pare this down into an audio-only service and then stick the client logic into a React app to recreate Umbra's conditions -- the next thing to figure out in this regard is 'rooms'. Once that's working I'll begin Umbra integration.
+
+1/31/24 21:30
+
+At present this repo isn't what the description says it is -- this *will* support rooms and be pared down from audio/video to audio only -- at present those are just next steps.
