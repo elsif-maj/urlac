@@ -37,12 +37,18 @@ var (
 	// lock for peerConnections and trackLocals
 	listLock        sync.RWMutex
 	peerConnections []peerConnectionState
-	trackLocals     map[string]*webrtc.TrackLocalStaticRTP
+	trackLocals     map[string]trackLocalsTuple
+	// trackLocals     map[string]*webrtc.TrackLocalStaticRTP
 )
 
 type websocketMessage struct {
 	Event string `json:"event"`
 	Data  string `json:"data"`
+}
+
+type trackLocalsTuple struct {
+	trackLocal *webrtc.TrackLocalStaticRTP
+	roomID     string
 }
 
 type peerConnectionState struct {
@@ -57,7 +63,8 @@ func main() {
 
 	// Init other state
 	log.SetFlags(0)
-	trackLocals = map[string]*webrtc.TrackLocalStaticRTP{}
+	trackLocals = map[string]trackLocalsTuple{}
+	// trackLocals = map[string]*webrtc.TrackLocalStaticRTP{}
 
 	// Read index.html from disk into memory, serve whenever anyone requests /
 	indexHTML, err := os.ReadFile("index.html")
@@ -88,11 +95,11 @@ func main() {
 }
 
 // Add to list of tracks and fire renegotation for all PeerConnections
-func addTrack(t *webrtc.TrackRemote) *webrtc.TrackLocalStaticRTP {
+func addTrack(t *webrtc.TrackRemote, roomID string) *webrtc.TrackLocalStaticRTP {
 	listLock.Lock()
 	defer func() {
 		listLock.Unlock()
-		signalPeerConnections()
+		signalPeerConnections(roomID)
 	}()
 
 	// Create a new TrackLocal with the same codec as our incoming
@@ -101,23 +108,26 @@ func addTrack(t *webrtc.TrackRemote) *webrtc.TrackLocalStaticRTP {
 		panic(err)
 	}
 
-	trackLocals[t.ID()] = trackLocal
+	trackLocals[t.ID()] = trackLocalsTuple{
+		trackLocal: trackLocal,
+		roomID:     roomID,
+	}
 	return trackLocal
 }
 
 // Remove from list of tracks and fire renegotation for all PeerConnections
-func removeTrack(t *webrtc.TrackLocalStaticRTP) {
+func removeTrack(t *webrtc.TrackLocalStaticRTP, roomID string) {
 	listLock.Lock()
 	defer func() {
 		listLock.Unlock()
-		signalPeerConnections()
+		signalPeerConnections(roomID)
 	}()
 
 	delete(trackLocals, t.ID())
 }
 
 // signalPeerConnections updates each PeerConnection so that it is getting all the expected media tracks
-func signalPeerConnections() {
+func signalPeerConnections(roomID string) {
 	listLock.Lock()
 	defer func() {
 		listLock.Unlock()
@@ -160,8 +170,8 @@ func signalPeerConnections() {
 
 			// Add all track we aren't sending yet to the PeerConnection
 			for trackID := range trackLocals {
-				if _, ok := existingSenders[trackID]; !ok {
-					if _, err := peerConnections[i].peerConnection.AddTrack(trackLocals[trackID]); err != nil {
+				if _, ok := existingSenders[trackID]; !ok && trackLocals[trackID].roomID == roomID {
+					if _, err := peerConnections[i].peerConnection.AddTrack(trackLocals[trackID].trackLocal); err != nil {
 						return true
 					}
 				}
@@ -197,7 +207,7 @@ func signalPeerConnections() {
 			// Release the lock and attempt a sync in 3 seconds. We might be blocking a RemoveTrack or AddTrack
 			go func() {
 				time.Sleep(time.Second * 3)
-				signalPeerConnections()
+				signalPeerConnections(roomID)
 			}()
 			return
 		}
@@ -320,15 +330,15 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 				log.Print(err)
 			}
 		case webrtc.PeerConnectionStateClosed:
-			signalPeerConnections()
+			signalPeerConnections(roomID)
 		default:
 		}
 	})
 
 	peerConnection.OnTrack(func(t *webrtc.TrackRemote, _ *webrtc.RTPReceiver) {
 		// Create a track to fan out our incoming video to all peers
-		trackLocal := addTrack(t)
-		defer removeTrack(trackLocal)
+		trackLocal := addTrack(t, roomID)
+		defer removeTrack(trackLocal, roomID)
 
 		buf := make([]byte, 1500)
 		for {
@@ -344,7 +354,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 	})
 
 	// Signal for the new PeerConnection
-	signalPeerConnections()
+	signalPeerConnections(roomID)
 
 	message := &websocketMessage{}
 	for {
