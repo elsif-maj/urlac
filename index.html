@@ -72,7 +72,7 @@
         ws.close()
       })
 
-      window.addEventListener('visibilitychange', function (event) {
+      window.addEventListener('beforeunload', function (event) {
         if (document.visibilityState === 'hidden' && pc) {
           console.log('THIS FIRED')
           pc.close();
