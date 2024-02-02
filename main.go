@@ -145,7 +145,6 @@ func signalPeerConnections(roomID string) {
 		for i := range peerConnections {
 			if peerConnections[i].peerConnection.ConnectionState() == webrtc.PeerConnectionStateClosed {
 				peerConnections = append(peerConnections[:i], peerConnections[i+1:]...)
-				fmt.Println("peer connection removed from peer connections array, line 145")
 				return true // We modified the slice, start from the beginning
 			}
 
@@ -179,9 +178,6 @@ func signalPeerConnections(roomID string) {
 			// Add all track we aren't sending yet to the PeerConnection
 			for trackID := range trackLocals {
 				if _, ok := existingSenders[trackID]; !ok && trackLocals[trackID].roomID == roomID && roomID == peerConnections[i].roomID {
-					fmt.Println("THIS HAPPENED!")
-					fmt.Println("Here's the roomID: ", roomID)
-					fmt.Println("Here's the trackLocals[trackID].roomID: ", trackLocals[trackID].roomID)
 					if _, err := peerConnections[i].peerConnection.AddTrack(trackLocals[trackID].trackLocal); err != nil {
 						return true
 					}
