@@ -67,7 +67,7 @@ func main() {
 	indexTemplate = template.Must(template.New("").Parse(string(indexHTML)))
 
 	// websocket handler
-	http.HandleFunc("/websocket", websocketHandler)
+	http.HandleFunc("/websocket/", websocketHandler)
 
 	// index.html handler
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
