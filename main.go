@@ -144,6 +144,7 @@ func signalPeerConnections(roomID string) {
 		for i := range peerConnections {
 			if peerConnections[i].peerConnection.ConnectionState() == webrtc.PeerConnectionStateClosed {
 				peerConnections = append(peerConnections[:i], peerConnections[i+1:]...)
+				fmt.Println("peer connection removed from peer connections array, line 145")
 				return true // We modified the slice, start from the beginning
 			}
 
@@ -338,6 +339,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 				log.Print(err)
 			}
 		case webrtc.PeerConnectionStateClosed:
+			fmt.Println("CONNECTION CLOSED LINE 341")
 			signalPeerConnections(roomID)
 		default:
 		}
