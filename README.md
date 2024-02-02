@@ -4,9 +4,7 @@ The server and client files being used here are modified versions of the Pion ex
 
 Todos:
 
-- Support rooms (done?-ish?)
-  - Figure out how to close connections/tracks when navigating to another room and/or voluntarily by button press
-
-- Check to see if renegotiations trigger skipping/disruption between already active participants
-
 - Refactor to not have everyone connected to everyone
+  - Rooms were implemented in a naive way when I couldn't debug the preferable version of things
+    where the current data structures for peerConnections and trackLocals both get prefixed with a map[string] 
+    to relativize them to 'room' buckets 
