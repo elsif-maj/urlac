@@ -29,9 +29,9 @@
   navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then(stream => {
       window.addEventListener('beforeunload', function (event) {
-        if (peerConnection) {
-          peerConnection.close();
-          peerConnection = null;
+        if (pc) {
+          pc.close();
+          pc = null;
         }
       });
 
