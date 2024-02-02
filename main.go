@@ -13,6 +13,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -78,7 +79,9 @@ func main() {
 
 	// index.html handler
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if err := indexTemplate.Execute(w, "wss://"+r.Host+"/websocket/"); err != nil {
+		room := strings.TrimPrefix(r.URL.Path, "/")
+		fmt.Println(room)
+		if err := indexTemplate.Execute(w, "wss://"+r.Host+"/websocket/"+room); err != nil {
 			log.Fatal(err)
 		}
 	})
