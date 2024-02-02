@@ -22,14 +22,19 @@
   <h3> Logs </h3>
   <div id="logs"></div>
 
-
+  <button id="button">close connection</button>
 </body>
 
 <script>
   navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then(stream => {
       let pc = new RTCPeerConnection()
-      
+      let disconnectButton = document.getElementById('button')
+
+      disconnectButton.addEventListener('click', function(e) {
+        pc.close()
+      })
+
       window.addEventListener('visibilitychange', function (event) {
         if (document.visibilityState === 'hidden' && pc) {
           console.log('THIS FIRED')
