@@ -30,8 +30,8 @@
     .then(stream => {
       let pc = new RTCPeerConnection()
       
-      window.addEventListener('beforeunload', function (event) {
-        if (pc) {
+      window.addEventListener('visibilitychange', function (event) {
+        if (document.visibilityState === 'hidden' && pc) {
           pc.close();
           pc = null;
         }
