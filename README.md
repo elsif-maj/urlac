@@ -5,6 +5,7 @@ The server and client files being used here are modified versions of the Pion ex
 Todos:
 
 - Support rooms (done?-ish?)
+  - Figure out how to close connections/tracks when navigating to another room and/or voluntarily by button press
 
 - Check to see if renegotiations trigger skipping/disruption between already active participants
 

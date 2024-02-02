@@ -28,6 +28,13 @@
 <script>
   navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then(stream => {
+      window.addEventListener('beforeunload', function (event) {
+        if (peerConnection) {
+          peerConnection.close();
+          peerConnection = null;
+        }
+      });
+
       let pc = new RTCPeerConnection()
       pc.ontrack = function (event) {
         if (event.track.kind === 'audio') {
