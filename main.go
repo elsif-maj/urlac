@@ -176,6 +176,8 @@ func signalPeerConnections(roomID string) {
 
 			// Add all track we aren't sending yet to the PeerConnection
 			for trackID := range trackLocals {
+				fmt.Println("Here's the roomID: ", roomID)
+				fmt.Println("Here's the trackLocals[trackID].roomID: ", trackLocals[trackID].roomID)
 				if _, ok := existingSenders[trackID]; !ok && trackLocals[trackID].roomID == roomID {
 					if _, err := peerConnections[i].peerConnection.AddTrack(trackLocals[trackID].trackLocal); err != nil {
 						return true
