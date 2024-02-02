@@ -118,6 +118,7 @@ func addTrack(t *webrtc.TrackRemote, roomID string) *webrtc.TrackLocalStaticRTP 
 		trackLocal: trackLocal,
 		roomID:     roomID,
 	}
+	fmt.Println(trackLocals[t.ID()])
 	return trackLocal
 }
 
