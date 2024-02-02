@@ -31,6 +31,7 @@
       let pc = new RTCPeerConnection()
       
       window.addEventListener('visibilitychange', function (event) {
+        console.log('THIS FIRED')
         if (document.visibilityState === 'hidden' && pc) {
           pc.close();
           pc = null;
