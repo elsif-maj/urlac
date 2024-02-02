@@ -80,9 +80,9 @@ func main() {
 	// index.html handler
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		room := strings.TrimPrefix(r.URL.Path, "/")
-		if room == "favicon.ico" {
-			return
-		}
+		// if room == "favicon.ico" {
+		// 	return
+		// }
 		fmt.Println(room)
 		if err := indexTemplate.Execute(w, "wss://"+r.Host+"/websocket/"+room); err != nil {
 			log.Fatal(err)
