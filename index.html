@@ -31,17 +31,6 @@
       let pc = new RTCPeerConnection()
       let disconnectButton = document.getElementById('button')
 
-      disconnectButton.addEventListener('click', function(e) {
-        pc.close()
-      })
-
-      window.addEventListener('visibilitychange', function (event) {
-        if (document.visibilityState === 'hidden' && pc) {
-          console.log('THIS FIRED')
-          console.log(pc.close());
-          pc = null;
-        }
-      });
       
       pc.ontrack = function (event) {
         if (event.track.kind === 'audio') {
@@ -76,7 +65,23 @@
           ws.send(JSON.stringify({ event: 'heartbeat', data: 'ping' }));
         }
       }, 5000);
+     
+      // MUH ATTEMPTS
+      disconnectButton.addEventListener('click', function(e) {
+        pc.close()
+        ws.close()
+      })
 
+      window.addEventListener('visibilitychange', function (event) {
+        if (document.visibilityState === 'hidden' && pc) {
+          console.log('THIS FIRED')
+          pc.close();
+          ws.close();
+          pc = null;
+        }
+      });
+      // END OF MUH ATTEMPTS
+      
       pc.onicecandidate = e => {
         if (!e.candidate) {
           return
