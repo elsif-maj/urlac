@@ -16,6 +16,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"sync"
 	"text/template"
 	"time"
@@ -47,6 +48,7 @@ type websocketMessage struct {
 type peerConnectionState struct {
 	peerConnection *webrtc.PeerConnection
 	websocket      *threadSafeWriter
+	roomID         string
 }
 
 func main() {
@@ -69,7 +71,7 @@ func main() {
 
 	// index.html handler
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if err := indexTemplate.Execute(w, "wss://"+r.Host+"/websocket"); err != nil {
+		if err := indexTemplate.Execute(w, "wss://"+r.Host+"/websocket/"); err != nil {
 			log.Fatal(err)
 		}
 	})
@@ -228,6 +230,12 @@ func dispatchKeyFrame() {
 
 // Handle incoming websockets
 func websocketHandler(w http.ResponseWriter, r *http.Request) {
+	// Extract the roomID from the URL. This assumes the URL is in the format /websocket/roomID
+	roomID := strings.TrimPrefix(r.URL.Path, "/websocket/")
+	if roomID == "" {
+		roomID = "default"
+	}
+
 	// Upgrade HTTP request to Websocket
 	unsafeConn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -281,7 +289,7 @@ func websocketHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Add our new PeerConnection to global list
 	listLock.Lock()
-	peerConnections = append(peerConnections, peerConnectionState{peerConnection, c})
+	peerConnections = append(peerConnections, peerConnectionState{peerConnection, c, roomID})
 	listLock.Unlock()
 
 	// Trickle ICE. Emit server candidate to client
