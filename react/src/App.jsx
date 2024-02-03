@@ -7,27 +7,18 @@ function App() {
 
   const handleAudioChatToggleButton = (e) => {
     e.preventDefault()
-
-    // THESE ARE THE ONLY CHANGES SINCE IT LAST WORKED:
-
     if (urlacIsOn) {
-      console.log('TURNING OFF URLAC!')
       pc.close()
       ws.close()
       setUrlacIsOn(!urlacIsOn)
       return
     }
-    
     setUrlacIsOn(!urlacIsOn)
-
-    // END OF CHANGES    
 
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
         //// RTC and tracks for SDP ////
         let pc = new RTCPeerConnection()
-        let disconnectButton = document.getElementById('button')
-
 
         pc.ontrack = function (event) {
           const audio = new Audio();
@@ -50,21 +41,13 @@ function App() {
           }
         }, 5000);
 
-        // MUH ATTEMPTS
-        disconnectButton.addEventListener('click', function (e) {
-          pc.close()
-          ws.close()
-        })
-
         window.addEventListener('beforeunload', function (event) {
           if (document.visibilityState === 'hidden' && pc) {
             console.log('THIS FIRED')
             pc.close();
             ws.close();
-            // pc = null;
           }
         });
-        // END OF MUH ATTEMPTS
 
         pc.onicecandidate = e => {
           if (!e.candidate) {
@@ -91,7 +74,6 @@ function App() {
                 return console.log('failed to parse answer')
               }
 
-              // New version:
               pc.setRemoteDescription(offer)
                 .then(() => pc.createAnswer())
                 .then(answer => {
@@ -119,7 +101,6 @@ function App() {
           console.log("ERROR (evt): " + evt)
         }
       }).catch(window.alert)
-    
   }
 
   return (
@@ -132,9 +113,6 @@ function App() {
         <button onClick={handleAudioChatToggleButton}>
           Audio Chat
         </button>
-        <div>
-          <button id="button">close connection</button>
-        </div>
       </div>
     </>
   )
