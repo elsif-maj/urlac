@@ -40,7 +40,7 @@ function App() {
           audio.play();
         }
 
-        stream.getTracks().forEach(track => pc.addTrack(track, stream))
+        // stream.getTracks().forEach(track => pc.addTrack(track, stream))
         // setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
         // let ws = new WebSocket("{{.}}")
         let ws = new WebSocket("wss://erlacmaj.com/websocket/")
