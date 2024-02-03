@@ -26,26 +26,26 @@ function App() {
         //   setUrlacIsOn(!urlacIsOn)
         //   return
         // }
-        setPc(new RTCPeerConnection())
-        // let pc = new RTCPeerConnection()
+        // setPc(new RTCPeerConnection())
+
+        //// RTC and tracks for SDP ////
+        let pc = new RTCPeerConnection()
         let disconnectButton = document.getElementById('button')
 
 
         pc.ontrack = function (event) {
           const audio = new Audio();
-          // const stream = new MediaStream();
-          // stream.addTrack(event.track);
           const otherPersonStream = new MediaStream([event.track])
           audio.srcObject = otherPersonStream;
           audio.play();
         }
 
-        // Doesn't work at all without this:
         stream.getTracks().forEach(track => pc.addTrack(track, stream))
+        setPc(pc)
 
-        setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
-        // let ws = new WebSocket("{{.}}")
-        // let ws = new WebSocket("wss://erlacmaj.com/websocket/")
+        //// WS ////
+        let ws = new WebSocket("wss://erlacmaj.com/websocket/")
+        setWs(ws)
 
         // Send a heartbeat every 5 seconds
         setInterval(() => {
