@@ -8,18 +8,25 @@ function App() {
   const handleAudioChatToggleButton = (e) => {
     e.preventDefault()
 
-    if (urlacIsOn) {
-      console.log('ON!')
-      pc.close()
-      ws.close()
-      setUrlacIsOn(!urlacIsOn)
-      return
-    }
+    // if (urlacIsOn) {
+    //   console.log('ON!')
+    //   pc.close()
+    //   ws.close()
+    //   setUrlacIsOn(!urlacIsOn)
+    //   return
+    // }
     
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
        
-        // setPc(new RTCPeerConnection())
+        if (urlacIsOn) {
+          console.log('ON!')
+          pc.close()
+          ws.close()
+          setUrlacIsOn(!urlacIsOn)
+          return
+        }
+        setPc(new RTCPeerConnection())
         // let pc = new RTCPeerConnection()
         let disconnectButton = document.getElementById('button')
 
@@ -34,7 +41,7 @@ function App() {
 
 // This works!  But is adding a new track every time the button is clicked
 
-        // setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
+        setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
         // let ws = new WebSocket("{{.}}")
         // let ws = new WebSocket("wss://erlacmaj.com/websocket/")
 
