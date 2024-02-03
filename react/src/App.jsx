@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 function App() {
   const [urlacIsOn, setUrlacIsOn] = useState(false)
-  const [pc, setPc] = useState(new RTCPeerConnection())
-  const [ws, setWs] = useState(new WebSocket("wss://erlacmaj.com/websocket/"))
+  // const [pc, setPc] = useState(new RTCPeerConnection())
+  // const [ws, setWs] = useState(new WebSocket("wss://erlacmaj.com/websocket/"))
 
   const handleAudioChatToggleButton = (e) => {
     e.preventDefault()
@@ -19,15 +19,15 @@ function App() {
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
        
-        if (urlacIsOn) {
-          console.log('ON!')
-          pc.close()
-          ws.close()
-          setUrlacIsOn(!urlacIsOn)
-          return
-        }
-        setPc(new RTCPeerConnection())
-        // let pc = new RTCPeerConnection()
+        // if (urlacIsOn) {
+        //   console.log('ON!')
+        //   pc.close()
+        //   ws.close()
+        //   setUrlacIsOn(!urlacIsOn)
+        //   return
+        // }
+        // setPc(new RTCPeerConnection())
+        let pc = new RTCPeerConnection()
         let disconnectButton = document.getElementById('button')
 
 
@@ -41,9 +41,9 @@ function App() {
 
 // This works!  But is adding a new track every time the button is clicked
 
-        setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
+        // setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
         // let ws = new WebSocket("{{.}}")
-        // let ws = new WebSocket("wss://erlacmaj.com/websocket/")
+        let ws = new WebSocket("wss://erlacmaj.com/websocket/")
 
         // Send a heartbeat every 5 seconds
         setInterval(() => {
