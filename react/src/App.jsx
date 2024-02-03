@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 function App() {
   const [urlacIsOn, setUrlacIsOn] = useState(false)
-  // const [pc, setPc] = useState(new RTCPeerConnection())
-  // const [ws, setWs] = useState(new WebSocket("wss://erlacmaj.com/websocket/"))
+  const [pc, setPc] = useState()
+  const [ws, setWs] = useState()
 
   const handleAudioChatToggleButton = (e) => {
     e.preventDefault()
@@ -26,8 +26,8 @@ function App() {
         //   setUrlacIsOn(!urlacIsOn)
         //   return
         // }
-        // setPc(new RTCPeerConnection())
-        let pc = new RTCPeerConnection()
+        setPc(new RTCPeerConnection())
+        // let pc = new RTCPeerConnection()
         let disconnectButton = document.getElementById('button')
 
 
@@ -43,9 +43,9 @@ function App() {
         // Doesn't work at all without this:
         stream.getTracks().forEach(track => pc.addTrack(track, stream))
 
-        // setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
+        setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
         // let ws = new WebSocket("{{.}}")
-        let ws = new WebSocket("wss://erlacmaj.com/websocket/")
+        // let ws = new WebSocket("wss://erlacmaj.com/websocket/")
 
         // Send a heartbeat every 5 seconds
         setInterval(() => {
