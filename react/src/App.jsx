@@ -75,7 +75,7 @@ function App() {
         }
 
         ws.onclose = function (evt) {
-          window.alert("Websocket has closed with code: " + evt.code + " reason: " + evt.reason)
+          window.alert("You have left the audio chatroom")
         }
 
         ws.onmessage = function (evt) {
