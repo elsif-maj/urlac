@@ -34,8 +34,9 @@ function App() {
         pc.ontrack = function (event) {
           const audio = new Audio();
           // const stream = new MediaStream();
-          stream.addTrack(event.track);
-          audio.srcObject = stream;
+          // stream.addTrack(event.track);
+          const otherPersonStream = new MediaStream([event.track])
+          audio.srcObject = otherPersonStream;
           audio.play();
         }
 
