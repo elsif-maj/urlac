@@ -8,26 +8,22 @@ function App() {
   const handleAudioChatToggleButton = (e) => {
     e.preventDefault()
 
-    // if (urlacIsOn) {
-    //   console.log('ON!')
-    //   pc.close()
-    //   ws.close()
-    //   setUrlacIsOn(!urlacIsOn)
-    //   return
-    // }
+    // THESE ARE THE ONLY CHANGES SINCE IT LAST WORKED:
+
+    if (urlacIsOn) {
+      console.log('TURNING OFF URLAC!')
+      pc.close()
+      ws.close()
+      setUrlacIsOn(!urlacIsOn)
+      return
+    }
     
+    setUrlacIsOn(!urlacIsOn)
+
+    // END OF CHANGES    
+
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
-       
-        // if (urlacIsOn) {
-        //   console.log('ON!')
-        //   pc.close()
-        //   ws.close()
-        //   setUrlacIsOn(!urlacIsOn)
-        //   return
-        // }
-        // setPc(new RTCPeerConnection())
-
         //// RTC and tracks for SDP ////
         let pc = new RTCPeerConnection()
         let disconnectButton = document.getElementById('button')
@@ -124,7 +120,6 @@ function App() {
         }
       }).catch(window.alert)
     
-      // setUrlacIsOn(!urlacIsOn)
   }
 
   return (
