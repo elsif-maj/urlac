@@ -1,5 +1,7 @@
 // import { useState } from 'react'
 
+// This file is here temporarily as a touchstone for possibly creating a React frontend option for miniConf
+
 function App() {
   // const [count, setCount] = useState(0)
 
