@@ -41,6 +41,7 @@ function App() {
 
 // This works!  But is adding a new track every time the button is clicked
 
+        stream.getTracks().forEach(track => pc.addTrack(track, stream))
         // setWs(new WebSocket("wss://erlacmaj.com/websocket/"))
         // let ws = new WebSocket("{{.}}")
         let ws = new WebSocket("wss://erlacmaj.com/websocket/")
