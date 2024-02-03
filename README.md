@@ -4,8 +4,6 @@ Todos:
 
 - Create React version of client that is functionally equivalent to interface with Umbra to prepare for integration
 
-- Pare down to just audio 
-
 - Refactor to not have everyone connected to everyone
   - Rooms were implemented in a naive way when I couldn't debug the preferable version. What I think is desirable is for the data structures for peerConnections and trackLocals both get prefixed with a map[string] to relativize them to 'room' buckets. At present, everyone is 'peer connected' to everyone and only track broadcasting enforces 'rooms'.
     
